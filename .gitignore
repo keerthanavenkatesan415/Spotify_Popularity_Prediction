@@ -212,3 +212,5 @@ data/
 *.sqlite
 *.sqlite3
 *.csv
+
+.DS_Store
