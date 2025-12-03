@@ -207,12 +207,18 @@ marimo/_lsp/
 __marimo__/
 
 # Project-specific ignores
-data/
+# Ignore raw data only
+data/raw/
+data/raw/*
+
+# Ignore large CSV files except cleaned
 *.db
 *.sqlite
 *.sqlite3
-*.csv
+
+# Allow cleaned data
 !data/cleaned/
 !data/cleaned/*
 !data/cleaned/*.csv
+
 .DS_Store
