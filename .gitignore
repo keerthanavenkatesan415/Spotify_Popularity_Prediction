@@ -222,4 +222,6 @@ data/raw/*.csv
 !data/cleaned/*
 !data/cleaned/*.csv
 
+spotify_100k.csv
+
 .DS_Store
