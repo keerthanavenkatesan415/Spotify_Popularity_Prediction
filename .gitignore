@@ -212,5 +212,6 @@ data/
 *.sqlite
 *.sqlite3
 *.csv
-
+!data/cleaned/
+!data/cleaned/*
 .DS_Store
