@@ -207,21 +207,26 @@ marimo/_lsp/
 __marimo__/
 
 # Project-specific ignores
-# Ignore raw data only
-data/raw/
-data/raw/*
-data/raw/*.csv
+# Project-specific ignores
 
-# Ignore large CSV files except cleaned
+# Ignore raw data except the sampled 100k file
+data/raw/*
+!data/raw/spotify_100k.csv
+
+# Ignore SQL databases
 *.db
 *.sqlite
 *.sqlite3
 
-# Allow cleaned data
+# Ignore Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Allow cleaned data CSVs
 !data/cleaned/
-!data/cleaned/*
 !data/cleaned/*.csv
 
-spotify_100k.csv
+!data/spotify.db
 
+
+# General ignored files
 .DS_Store
