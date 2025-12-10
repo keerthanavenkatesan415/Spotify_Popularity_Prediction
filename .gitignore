@@ -227,6 +227,11 @@ data/raw/*
 
 !data/spotify.db
 
+# Ignore trained models
+models/*.pkl
+models/*.joblib
+models/*.sav
+
 
 # General ignored files
 .DS_Store
