@@ -5,16 +5,14 @@ import sqlite3
 from pathlib import Path
 import joblib
 
-# -------------------------------------------------------------------
 # PATHS
-# -------------------------------------------------------------------
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 MODEL_DIR = BASE_DIR / "models"
 DB_PATH = BASE_DIR / "data" / "spotify.db"
 
-# -------------------------------------------------------------------
 # LOAD ARTIFACTS (MODEL + SCALERS + FEATURE ORDER)
-# -------------------------------------------------------------------
+
 rf_model = joblib.load(MODEL_DIR / "final_random_forest.pkl")
 scaler_numeric = joblib.load(MODEL_DIR / "scaler_numeric.pkl")
 scaler_cluster = joblib.load(MODEL_DIR / "scaler_cluster.pkl")
@@ -35,9 +33,8 @@ cluster_features = [
     "liveness", "valence", "tempo", "duration_ms"
 ]
 
-# -------------------------------------------------------------------
-# DATABASE CONNECTION (safe per-thread)
-# -------------------------------------------------------------------
+# DATABASE CONNECTION 
+
 def get_conn():
     return sqlite3.connect(DB_PATH, check_same_thread=False)
 
@@ -45,18 +42,18 @@ def get_conn():
 with get_conn() as conn:
     genres_from_sql = sorted(pd.read_sql("SELECT DISTINCT genre FROM tracks;", conn)["genre"])
 
-# -------------------------------------------------------------------
+
 # HELPER — Compute Cluster ID for a new song
-# -------------------------------------------------------------------
+
 def compute_cluster_id(song_features: dict):
     """Compute cluster membership using the clustering scaler + KMeans."""
     cluster_input = np.array([[song_features[f] for f in cluster_features]])
     cluster_scaled = scaler_cluster.transform(cluster_input)
     return int(kmeans.predict(cluster_scaled)[0])
 
-# -------------------------------------------------------------------
+
 # HELPER — Build model input row with correct feature ordering
-# -------------------------------------------------------------------
+
 def build_model_input(song_features: dict, cluster_id: int):
     """Build a DataFrame aligned to the model's expected feature order."""
 
@@ -83,17 +80,17 @@ def build_model_input(song_features: dict, cluster_id: int):
     return pd.DataFrame([final], columns=feature_cols)
 
 
-# -------------------------------------------------------------------
+
 # STREAMLIT UI
-# -------------------------------------------------------------------
+
 st.set_page_config(page_title="Spotify Popularity Predictor", layout="wide")
 st.title("🎵 Spotify Popularity Prediction & Song Explorer")
-
+# use emojis to make the UI not boring for users to look at until UI can be improved later
 tabs = st.tabs(["🔮 Predict Popularity", "🎧 Genre Explorer"])
 
-# -------------------------------------------------------------------
+
 # TAB 1 — POPULARITY PREDICTION
-# -------------------------------------------------------------------
+
 with tabs[0]:
     st.header("Predict Song Popularity")
     st.write("Enter song characteristics below. Values must reflect actual audio feature scales (0–1 for most).")
@@ -102,22 +99,22 @@ with tabs[0]:
 
     with col1:
         year = st.number_input("Year Released", 1900, 2025, 2020)
-        danceability = st.slider("Danceability (0–1)", 0.0, 1.0, 0.5)
-        energy = st.slider("Energy (0–1)", 0.0, 1.0, 0.5)
+        danceability = st.slider("Danceability (0-1)", 0.0, 1.0, 0.5)
+        energy = st.slider("Energy (0-1)", 0.0, 1.0, 0.5)
         loudness = st.number_input("Loudness (dB)", -60.0, 0.0, -10.0)
-        speechiness = st.slider("Speechiness (0–1)", 0.0, 1.0, 0.05)
-        acousticness = st.slider("Acousticness (0–1)", 0.0, 1.0, 0.2)
-        instrumentalness = st.slider("Instrumentalness (0–1)", 0.0, 1.0, 0.0)
+        speechiness = st.slider("Speechiness (0-1)", 0.0, 1.0, 0.05)
+        acousticness = st.slider("Acousticness (0-1)", 0.0, 1.0, 0.2)
+        instrumentalness = st.slider("Instrumentalness (0-1)", 0.0, 1.0, 0.0)
         genre = st.selectbox("Genre", genres_from_sql)
 
     with col2:
-        liveness = st.slider("Liveness (0–1)", 0.0, 1.0, 0.2)
-        valence = st.slider("Valence (0–1)", 0.0, 1.0, 0.5)
+        liveness = st.slider("Liveness (0-1)", 0.0, 1.0, 0.2)
+        valence = st.slider("Valence (0-1)", 0.0, 1.0, 0.5)
         tempo = st.number_input("Tempo (BPM)", 40.0, 250.0, 120.0)
         duration_ms = st.number_input("Duration (ms)", 10000, 500000, 180000)
-        key_val = st.number_input("Musical Key (0–11)", 0, 11, 5)
+        key_val = st.number_input("Musical Key (0-11)", 0, 11, 5)
         mode_val = st.number_input("Mode (0=Minor, 1=Major)", 0, 1, 1)
-        time_sig = st.number_input("Time Signature (1–7)", 1, 7, 4)
+        time_sig = st.number_input("Time Signature (1-7)", 1, 7, 4)
 
     if st.button("Predict Popularity", type="primary"):
         user_song = {
@@ -150,9 +147,9 @@ with tabs[0]:
         st.success(f"🎯 Predicted Popularity: **{pred:.1f} / 100**")
         st.info(f"Cluster Assigned: **{cluster_id}**")
 
-# -------------------------------------------------------------------
+
 # TAB 2 — GENRE EXPLORER
-# -------------------------------------------------------------------
+
 with tabs[1]:
     st.header("Explore Songs by Genre")
 
