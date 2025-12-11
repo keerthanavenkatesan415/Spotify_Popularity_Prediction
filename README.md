@@ -25,43 +25,29 @@ The repository also includes comprehensive **Jupyter notebooks** for exploration
 
 ## 🧱 Project Architecture
 
+```mermaid
+%%{init: {'flowchart': {'htmlLabels': true}} }%%
+
+flowchart TD
+
+    A[Raw Spotify Data<br/>spotify_100k.csv<br/>spotify_data.csv] --> B[Data Cleaning & EDA<br/>01_exploration<br/>03_preprocessing]
+
+    B --> C[Feature Engineering<br/>Scaling, Encoding, Selection<br/>sp_dataset_for_modeling.csv]
+
+    C --> D[ML Regression Model<br/>04_modeling<br/>final_random_forest.pkl<br/>scaler_numeric.pkl]
+
+    C --> E[K-Means Clustering<br/>05_sql_cluster_analysis<br/>kmeans.pkl<br/>scaler_cluster.pkl]
+
+    B --> F[SQLite Database<br/>spotify.db]
+
+    F --> G[SQL Analysis<br/>02_sql_analysis]
+
+    D --> H[Streamlit App<br/>app/app.py]
+    E --> H
+    G --> H
 ```
-                         ┌──────────────────────┐
-                         │   Raw Spotify Data   │
-                         │ (spotify_100k.csv)   │
-                         └──────────┬───────────┘
-                                    │
-                                    ▼
-                         ┌──────────────────────┐
-                         │   Cleaning & EDA     │
-                         │ (01_exploration,     │
-                         │ 03_preprocessing)    │
-                         └──────────┬───────────┘
-                                    │
-                                    ▼
-                   ┌──────────────────────────────────┐
-                   │   Feature Engineering            │
-                   │  (scaling, encoding, feature     │
-                   │   selection → sp_dataset...)     │
-                   └────────────────┬─────────────────┘
-                                    │
-          ┌─────────────────────────┼─────────────────────────┐
-          ▼                         ▼                         ▼
-┌──────────────────┐    ┌─────────────────────┐    ┌───────────────────────┐
-│ ML Regression     │    │ K-Means Clustering │    │ SQL Analysis (SQLite) │
-│ 04_modeling.ipynb │    │ 05_sql_cluster...  │    │ 02_sql_analysis.ipynb │
-└─────────┬─────────┘    └──────────┬─────────┘    └──────────┬────────────┘
-          │                          │                        │
-          ▼                          │                        ▼
-┌──────────────────┐                 │             ┌────────────────────────┐
-│ final_random_... │                 │             │ spotify.db (Relational │
-│ scaler_numeric   │                 │             │ Database)               │
-│ scaler_cluster   │                 ▼             └────────────────────────┘
-└─────────┬────────┘     ┌──────────────────────────┐
-          │              │ Streamlit Application     │
-          │              │ (app/app.py)             │
-          ▼              └──────────────────────────┘
-```
+
+
 
 ---
 
