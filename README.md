@@ -1,209 +1,208 @@
 # 🎧 Spotify Popularity Prediction  
-**A Data Management + Machine Learning Project**
+A Data Management, SQL Analytics, and Machine Learning Project
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![Streamlit](https://img.shields.io/badge/Streamlit-App-red)
+![Streamlit](https://img.shields.io/badge/Streamlit-Interactive%20App-red)
 ![SQLite](https://img.shields.io/badge/SQLite-Database-green)
-![Machine Learning](https://img.shields.io/badge/ML-Regression-orange)
+![Machine Learning](https://img.shields.io/badge/ML-Regression%20%2B%20Clustering-orange)
+![Git LFS](https://img.shields.io/badge/Git-LFS%20Support-yellow)
+![Status](https://img.shields.io/badge/Project-Active-success)
 
 ---
 
-## 📌 Project Overview
-This project explores Spotify track data to **clean, transform, and model** musical features in order to predict a track’s popularity.  
-It integrates **data management**, **database querying**, **SQL-based exploratory analysis**, and **machine learning modeling**.  
-A **Streamlit application** allows users to explore the processed dataset and interact with predictions.
+## 📌 Overview
 
-The project fulfills all three required components:
+This project analyzes a large Spotify music dataset to explore **song characteristics**, perform **SQL-based analytical queries**, clean and transform data, and build **machine learning models** that predict track popularity.  
+It incorporates all three required course components:
 
-- **Data Management:** cleaning, feature engineering, SQLite database, SQL cluster analysis  
-- **Machine Learning:** regression modeling (notebooks 03–04)  
-- **Application Layer:** Streamlit GUI (`app/app.py`)  
+- **Data Management**: cleaning, preprocessing, SQLite relational database  
+- **Machine Learning**: regression modeling, clustering (K-Means), feature scaling  
+- **Application Layer**: Streamlit application for interactive usage  
+
+The repository also includes comprehensive **Jupyter notebooks** for exploration, SQL analysis, and modeling.
 
 ---
 
-## 📁 Repository Structure
+## 🧱 Project Architecture
 
 ```
-Spotify_Popularity_Prediction-main/
-│
-├── app/
-│   └── app.py                    # Streamlit interface
-│
-├── data/
-│   ├── spotify.db                # SQLite database used for SQL analysis
-│   ├── raw/
-│   │   └── spotify_100k.csv      # Original dataset
-│   └── cleaned/
-│       ├── spotify_cleaned.csv
-│       └── sp_dataset_for_modeling.csv
-│
-├── docs/
-│   ├── data_dictionary.md        # Explanation of features
-│   └── data_overview.md          # Dataset summary
-│
-├── models/
-│   └── feature_columns.txt       # Columns selected for modeling
-│
-├── notebooks/
-│   ├── 01_data_overview.ipynb
-│   ├── 02_data_cleaning.ipynb
-│   ├── 03_feature_engineering.ipynb
+                         ┌──────────────────────┐
+                         │   Raw Spotify Data   │
+                         │ (spotify_100k.csv)   │
+                         └──────────┬───────────┘
+                                    │
+                                    ▼
+                         ┌──────────────────────┐
+                         │   Cleaning & EDA     │
+                         │ (01_exploration,     │
+                         │ 03_preprocessing)    │
+                         └──────────┬───────────┘
+                                    │
+                                    ▼
+                   ┌──────────────────────────────────┐
+                   │   Feature Engineering            │
+                   │  (scaling, encoding, feature     │
+                   │   selection → sp_dataset...)     │
+                   └────────────────┬─────────────────┘
+                                    │
+          ┌─────────────────────────┼─────────────────────────┐
+          ▼                         ▼                         ▼
+┌──────────────────┐    ┌─────────────────────┐    ┌───────────────────────┐
+│ ML Regression     │    │ K-Means Clustering │    │ SQL Analysis (SQLite) │
+│ 04_modeling.ipynb │    │ 05_sql_cluster...  │    │ 02_sql_analysis.ipynb │
+└─────────┬─────────┘    └──────────┬─────────┘    └──────────┬────────────┘
+          │                          │                        │
+          ▼                          │                        ▼
+┌──────────────────┐                 │             ┌────────────────────────┐
+│ final_random_... │                 │             │ spotify.db (Relational │
+│ scaler_numeric   │                 │             │ Database)               │
+│ scaler_cluster   │                 ▼             └────────────────────────┘
+└─────────┬────────┘     ┌──────────────────────────┐
+          │              │ Streamlit Application     │
+          │              │ (app/app.py)             │
+          ▼              └──────────────────────────┘
+```
+
+---
+
+## 📁 Folder Structure
+
+```
+├── app
+│   └── app.py
+├── data
+│   ├── cleaned
+│   │   ├── sp_dataset_for_modeling.csv
+│   │   └── spotify_cleaned.csv
+│   ├── raw
+│   │   ├── spotify_100k.csv
+│   │   └── spotify_data.csv
+│   └── spotify.db
+├── docs
+│   ├── data_dictionary.md
+│   └── data_overview.md
+├── models
+│   ├── feature_columns.txt
+│   ├── final_random_forest.pkl
+│   ├── kmeans.pkl
+│   ├── scaler_cluster.pkl
+│   └── scaler_numeric.pkl
+├── notebooks
+│   ├── 01_exploration.ipynb
+│   ├── 02_sql_analysis.ipynb
+│   ├── 03_preprocessing.ipynb
 │   ├── 04_modeling.ipynb
 │   └── 05_sql_cluster_analysis.ipynb
-│
-├── requirements.txt
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
 ---
 
-## 🔍 Data Pipeline
+## ⚙️ Installation & Setup
 
-### **1. Raw Data**
-Stored in:
-```
-data/raw/spotify_100k.csv
-```
+### 1. Clone the repository
 
-### **2. Cleaning & Preparation**  
-Performed in notebooks:
-- `02_data_cleaning.ipynb`
-  - Remove duplicates  
-  - Normalize inconsistent values  
-  - Fix missing or invalid entries  
-
-Outputs saved to:
-```
-data/cleaned/spotify_cleaned.csv
-```
-
-### **3. Feature Engineering**
-Notebook:
-- `03_feature_engineering.ipynb`
-
-Includes:
-- Selecting numerical audio features  
-- Encoding categorical fields (genre, mode, key)  
-- Preparing modeling dataset
-
-Output:
-```
-data/cleaned/sp_dataset_for_modeling.csv
-models/feature_columns.txt
-```
-
-### **4. Machine Learning Model Training**
-Notebook:
-- `04_modeling.ipynb`
-
-Includes steps such as:
-- Train/test split  
-- Standardization  
-- Model selection (e.g., Random Forest, Linear Regression, etc.)  
-- Evaluation metrics (RMSE, MAE, R²)
-
-### **5. SQL Analysis & Clustering**
-Notebook:
-- `05_sql_cluster_analysis.ipynb`
-
-Uses:
-```
-data/spotify.db
-```
-Tasks performed:
-- SQL queries for data exploration  
-- Cluster analysis using SQL-based grouping  
-
----
-
-## 🧠 Application (Streamlit App)
-
-The Streamlit app (`app/app.py`) provides a GUI for:
-- Viewing dataset summaries  
-- Querying the SQLite database  
-- Visualizing track distributions  
-- Running model-based predictions (if included in your app logic)
-
----
-
-## 🛠 Installation & Setup
-
-### **1. Clone the Repository**
 ```bash
-git clone <your-project-repo>
-cd Spotify_Popularity_Prediction-main
+git clone https://github.com/YOUR_USERNAME/Spotify_Popularity_Prediction.git
+cd Spotify_Popularity_Prediction
 ```
 
-### **2. Create a Virtual Environment(optional)**
+### 2. Create a virtual environment(optional)
+
 ```bash
 python3 -m venv venv
-source venv/bin/activate     # Mac/Linux
-venv\Scripts\activate        # Windows
+source venv/bin/activate    # macOS/Linux
+venv\Scripts\activate       # Windows
 ```
 
-### **3. Install Dependencies**
+### 3. Install required dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### **4. Verify Required Files Exist**
-```bash
-ls data/raw/
-ls data/cleaned/
-ls notebooks/
-ls models/
+---
+
+## 📦 Handling Large Model Files (Critical Section)
+
+This project requires several pre-trained models stored in:
+
 ```
+models/
+    final_random_forest.pkl
+    kmeans.pkl
+    scaler_numeric.pkl
+    scaler_cluster.pkl
+```
+
+Because these files can be large, **two supported methods** are provided.
+
+---
+
+### **Option A — Git LFS (if your repo uses LFS)**
+
+If you cloned using Git LFS:
+
+```bash
+git lfs install
+git lfs pull
+```
+
+This will automatically download the `.pkl` files into the `models/` folder.
 
 ---
 
 ## ▶️ Running the Streamlit App
 
-From the project root:
+Once model files and dependencies are installed:
 
 ```bash
 streamlit run app/app.py
 ```
 
-The app will open automatically in the browser at:
-```
-http://localhost:8501/
-```
+The app provides:
+
+- Popularity prediction on input song features  
+- Exploration of cleaned dataset  
+- Display of clustering insights  
+- SQL-driven analytics visualizations  
 
 ---
 
-## 📊 Notebooks Summary
+## 📊 Notebooks Overview
 
 | Notebook | Purpose |
 |---------|---------|
-| **01_data_overview.ipynb** | Initial EDA, understanding raw dataset |
-| **02_data_cleaning.ipynb** | Cleaning, handling missing data, preprocessing |
-| **03_feature_engineering.ipynb** | Feature selection, encoding, dataset preparation |
-| **04_modeling.ipynb** | Train ML model + evaluate performance |
-| **05_sql_cluster_analysis.ipynb** | SQL analysis inside SQLite database |
+| **01_exploration.ipynb** | Exploratory data analysis on raw data |
+| **02_sql_analysis.ipynb** | SQL queries and analytics on `spotify.db` |
+| **03_preprocessing.ipynb** | Cleaning, feature engineering, scaling |
+| **04_modeling.ipynb** | Training Random Forest model and saving `.pkl` files |
+| **05_sql_cluster_analysis.ipynb** | K-Means clustering with SQL integration |
+
+All notebooks are optional for running the app — models are pre-trained.
 
 ---
 
-## 🧰 Tech Stack
+## 🛠 Technologies Used
 
-| Component | Technology |
-|----------|------------|
-| Programming | Python |
-| Database | SQLite (`spotify.db`) |
-| ML Libraries | Pandas, NumPy, scikit-learn |
-| Visualization | Seaborn, Matplotlib |
-| Interface | Streamlit |
-| Data Storage | CSV, SQLite |
+- **Python 3.10+**  
+- **Pandas / NumPy / Scikit-Learn**  
+- **SQLite** for relational data analysis  
+- **Matplotlib / Seaborn** for visualizations  
+- **Streamlit** for the interactive application  
+- **Git LFS** for managing large model artifacts  
 
 ---
 
-## 🚀 Future Enhancements  
-- Deploy model endpoint using FastAPI   
-- Add user-upload prediction functionality in Streamlit  
-- Integrate genre clustering visuals into the UI  
+## 🚀 Future Improvements
 
+- Deploy app version online (Streamlit Cloud)  
 ---
 
 ## 👥 Contributors
-- Keerthana Venkatesan
 
----
+- Keerthana Venkatesan  
+
+
+
